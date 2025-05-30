@@ -2,7 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
-import psycopg2
+from django.db import IntegrityError
 from django.contrib.auth.decorators import login_required
 
 
@@ -18,17 +18,18 @@ def signup(request):
                 user = User.objects.create_user(username=username, password=password, email=email)
                 user.save()
                 messages.success(request, 'Account created successfully')
-                return redirect("login/")
+                return redirect("login")
 
-            except psycopg2.IntegrityError:
-                messages.error(request, 'Username already taken')
-                return redirect("signup/")
+            except IntegrityError:
+                messages.error(request, 'Username or email already exists')
+                return render(request, 'users/signup.html')
 
         else:
             messages.error(request, 'Passwords do not match')
-            return redirect("signup/")
+            return render(request, 'users/signup.html')
 
     return render(request, "users/signup.html")
+
 
 def log_in(request):
     if request.method == 'POST':
@@ -42,12 +43,13 @@ def log_in(request):
 
         else:
             messages.error(request, 'Invalid username or password')
-            return redirect("signup/")
+            return render(request, "users/login.html")
 
     return render(request, "users/login.html")
 
-@login_required(login_url="login/")
+
+@login_required(login_url="login")
 def log_out(request):
     logout(request)
     messages.success(request, "You have been logged out.")
-    return redirect("login/")
+    return redirect("login")
