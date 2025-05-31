@@ -50,3 +50,11 @@ def view_note(request, note_id):
     html_content = markdown(note.content)
     return render(request, 'notes/note.html', {'note': note, 'html_content': html_content})
 
+
+@login_required(login_url='login')
+def delete_note(request, note_id):
+    note = get_object_or_404(Note, id=note_id, user=request.user)
+    note.delete()
+    messages.success(request, 'Note deleted successfully.')
+    return redirect('index')
+
