@@ -8,14 +8,6 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 
 
-@login_not_required
-def public_note_view(request, username, pk):
-    user = get_object_or_404(User, username=username)
-    note = get_object_or_404(Note, user=user, pk=pk, is_public=True)
-    html_content = markdown(note.content)
-    return render(request, 'notes/note.html', {'note': note, 'html_content': html_content})
-
-
 @login_required(login_url='login')
 def index_view(request):
     notes = request.user.notes.all().order_by('-created_at')
@@ -50,4 +42,11 @@ def save_note(request):
 
     messages.error(request, 'Both title and content are required.')
     return render(request, 'notes/new.html', {'error': 'Title and content are required.'})
+
+
+@login_required(login_url='login')
+def view_note(request, note_id):
+    note = get_object_or_404(Note, id=note_id, user=request.user)
+    html_content = markdown(note.content)
+    return render(request, 'notes/note.html', {'note': note, 'html_content': html_content})
 

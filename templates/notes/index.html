@@ -119,7 +119,7 @@
             <ul class="notes-list">
                 {% for note in notes %}
                     <li class="note-item">
-                        <a href="{% url 'index' %}" class="note-link">
+                        <a href="{% url 'view_note' note.id %}" class="note-link">
                             <div class="note-title">{{ note.title }}</div>
                             <div class="note-date">Created {{ note.created_at|date:"M d, Y" }}</div>
                         </a>
