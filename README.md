@@ -1,33 +1,114 @@
-# Notes
+# 📝 CloudNotes – Markdown Notes with Public Sharing
 
-1. 🛠 Built with Django: A full-stack web app using Django that handles both frontend and backend logic in a beginner-friendly monolithic structure.
+CloudNotes is a simple, lightweight Django-based web app that allows users to:
+- Write notes using Markdown ✍️
+- Save them securely to the cloud ☁️
+- Share them publicly via unique URLs 🔗
 
-2. 👤 User Authentication: Users can sign up, log in, and manage their own private notes using Django’s built-in authentication system.
+---
 
-3. 📝 Markdown Notes: Users can create, edit, delete, and view notes written in Markdown, with live or saved HTML rendering using the markdown Python package.
+## 🚀 Features
 
-4. 📦 App Structure:
+- ✅ User authentication (signup, login, logout)
+- ✅ Create, view, and delete Markdown notes
+- ✅ Real-time Markdown editing using SimpleMDE editor
+- ✅ Public sharing of notes via `/username/<note_id>/` URLs
+- ✅ Auto-logout on browser close for extra privacy
+- ✅ Django Admin support for managing notes
 
-   - `users`: handles auth and profiles.
+---
 
-   - `notes`: manages note creation and display.
+## 🏗️ Tech Stack
 
-   - `sync`: (optional) for cloud backup/export.
+- **Backend:** Django (Python)
+- **Frontend:** Django Templates + SimpleMDE Markdown Editor
+- **Database:** PostgreSQL (for production), SQLite (for development)
+- **Deployment:** Hosted on [Render](https://render.com)
+- **Static File Serving:** WhiteNoise
 
-   - `pages`: (optional) for static views like home/about.
+---
 
-5. 🧠 Monolithic Architecture: No microservices required; all logic lives in a single Django project with modular apps.
+## 📁 Folder Structure
 
-6. 📚 Database:
+```
+cloudnotes/
+├── notes/                 # Project settings
+├── markdown_notes/        # Notes app: views, models, templates
+├── users/                 # Authentication logic
+├── templates/             # Base templates
+├── static/                # Static files (CSS/JS)
+├── manage.py
+├── requirements.txt
+└── Procfile
+```
 
-   - Uses SQLite in development.
+---
 
-   - Will switch to PostgreSQL for production deployments.
+## 🔧 Setup Instructions
 
-7. 🖼 Frontend: Built using Django templates; can optionally be styled with Bootstrap or TailwindCSS for a clean UI.
+### 1. Clone the repo
 
-8. ☁️ Cloud Sync (Planned): Future feature to sync notes to services like Google Drive or Dropbox, or export them as .pdf or .txt.
+```bash
+git clone https://github.com/hey-granth/notes.git
+cd notes
+```
 
-9. 🚀 Deployment Plan: Will be hosted for free on platforms like Render, Railway, or Fly.io with HTTPS and PostgreSQL.
+### 2. Create and activate virtual environment
 
-10. 📈 Learning Goals: A project to practice Django models, views, templates, authentication, and deployment—ideal for beginners stepping into full-stack web development.
+```bash
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+```
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 4. Configure environment
+
+Create a `.env` file and set:
+```
+SECRET_KEY=your_secret_key
+DEBUG=True
+```
+
+### 5. Run locally
+
+```bash
+python manage.py migrate
+python manage.py runserver
+```
+
+Then open [http://localhost:8000](http://localhost:8000)
+
+---
+
+## 🚀 Deploy to Render
+
+1. Push code to GitHub
+2. Add `render.yaml` and `Procfile`
+3. Create new Web Service on [render.com](https://render.com)
+4. Add `SECRET_KEY`, `DEBUG`, and `DATABASE_URL` as environment variables
+5. Enable PostgreSQL
+6. Add build command: `pip install -r requirements.txt && python manage.py collectstatic --noinput`
+
+---
+
+## 📜 License
+
+This project is licensed under the MIT License.
+
+---
+
+## 💡 Future Improvements
+
+- Note editing
+- Note version history
+- Rich Markdown support (tables, code highlighting)
+- User profiles
+
+---
+
+Made with ❤️ using Django.
