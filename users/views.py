@@ -1,11 +1,16 @@
+# Users Views file
+
+from functools import lru_cache
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.shortcuts import render, redirect
 from django.db import IntegrityError
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, login_not_required
 
 
+@login_not_required
+@lru_cache(maxsize=None)
 def signup(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -31,6 +36,8 @@ def signup(request):
     return render(request, "users/signup.html")
 
 
+@login_not_required
+@lru_cache(maxsize=None)
 def log_in(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -39,7 +46,7 @@ def log_in(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect("")
+            return redirect("index")
 
         else:
             messages.error(request, 'Invalid username or password')

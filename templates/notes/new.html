@@ -1,0 +1,189 @@
+{% extends "base.html" %}
+{% block title %}Create New Note - CloudNotes{% endblock %}
+
+{% block content %}
+    <style>
+        .create-container {
+            max-width: 90%;
+            margin: 0 auto;
+        }
+
+        .create-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .create-header h2 {
+            color: #e1e1e1;
+            font-size: 1.75rem;
+            font-weight: 500;
+            margin: 0;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #a0a0a0;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            background: rgba(0, 0, 0, 0.2);
+            color: #e1e1e1;
+        }
+
+        .form-group input[type="text"]:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3);
+            background: rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-save {
+            background: #2d2d2d;
+            color: #e1e1e1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-save:hover {
+            background: #3d3d3d;
+            transform: translateY(-1px);
+        }
+
+        /* SimpleMDE Dark Theme Overrides */
+        .CodeMirror {
+            background: rgba(0, 0, 0, 0.2) !important;
+            color: #e1e1e1 !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-radius: 4px !important;
+        }
+
+        .CodeMirror-cursor {
+            border-left: 1px solid #e1e1e1 !important;
+        }
+
+        .CodeMirror-selected {
+            background: rgba(255, 255, 255, 0.1) !important;
+        }
+
+        .editor-toolbar {
+            background: #2d2d2d !important;
+            border: 1px solid rgba(255, 255, 255, 0.1) !important;
+            border-bottom: none !important;
+            border-radius: 4px 4px 0 0 !important;
+        }
+
+        .editor-toolbar a {
+            color: #a0a0a0 !important;
+        }
+
+        .editor-toolbar a:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: #e1e1e1 !important;
+        }
+
+        .editor-toolbar.fullscreen {
+            background: #1e1e1e !important;
+        }
+
+        .CodeMirror-fullscreen {
+            background: #1e1e1e !important;
+        }
+
+        .editor-preview {
+            background: #1e1e1e !important;
+            color: #e1e1e1 !important;
+        }
+
+        .editor-preview h1,
+        .editor-preview h2,
+        .editor-preview h3,
+        .editor-preview h4,
+        .editor-preview h5,
+        .editor-preview h6 {
+            color: #e1e1e1 !important;
+        }
+
+        .editor-preview code {
+            background: rgba(255, 255, 255, 0.05) !important;
+            color: #e1e1e1 !important;
+        }
+
+        .editor-preview pre {
+            background: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        .editor-preview blockquote {
+            border-left: 3px solid rgba(255, 255, 255, 0.2) !important;
+            color: #a0a0a0 !important;
+        }
+    </style>
+
+    <div class="create-container">
+        <div class="create-header">
+            <h2>Create a New Note</h2>
+        </div>
+
+        <form method="POST" action="{% url 'save_note' %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input type="text" name="title" id="title" required>
+            </div>
+
+            <div class="form-group">
+                <label for="markdown-editor">Content (Markdown)</label>
+                <textarea id="markdown-editor" name="content" rows="10" required></textarea>
+            </div>
+
+            <button type="submit" class="btn-save" formaction="{% url 'save_note' %}">
+                <span>💾</span>
+                Save Note
+            </button>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" name="is_public">
+                    Make this note public
+                </label>
+            </div>
+        </form>
+    </div>
+
+    <!-- SimpleMDE Scripts -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+    <script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+    <script>
+        var simplemde = new SimpleMDE({
+            element: document.getElementById("markdown-editor"),
+            spellChecker: false,
+            status: false,
+            toolbar: [
+                "bold", "italic", "heading", "|",
+                "quote", "unordered-list", "ordered-list", "|",
+                "link", "image", "|",
+                "preview", "side-by-side", "fullscreen"
+            ]
+        });
+    </script>
+{% endblock %}

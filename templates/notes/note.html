@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block title %}{{ note.title }} - CloudNotes{% endblock %}
+
+{% block content %}
+    <style>
+        .note-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .note-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .note-title {
+            color: #e1e1e1;
+            font-size: 2rem;
+            font-weight: 500;
+            margin: 0 0 0.5rem 0;
+            line-height: 1.3;
+        }
+
+        .note-meta {
+            color: #a0a0a0;
+            font-size: 0.9rem;
+        }
+
+        .note-content {
+            color: #e1e1e1;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .note-content h1,
+        .note-content h2,
+        .note-content h3,
+        .note-content h4,
+        .note-content h5,
+        .note-content h6 {
+            color: #e1e1e1;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .note-content p {
+            margin-bottom: 1rem;
+        }
+
+        .note-content ul,
+        .note-content ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+
+        .note-content li {
+            margin-bottom: 0.5rem;
+        }
+
+        .note-content blockquote {
+            border-left: 3px solid rgba(255, 255, 255, 0.2);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #a0a0a0;
+            font-style: italic;
+        }
+
+        .note-content code {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 0.2rem 0.4rem;
+            border-radius: 3px;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .note-content pre {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1rem;
+            border-radius: 4px;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .note-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .note-content a {
+            color: #e1e1e1;
+            text-decoration: underline;
+            text-decoration-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .note-content a:hover {
+            text-decoration-color: #e1e1e1;
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #a0a0a0;
+            text-decoration: none;
+            padding: 0.5rem 0;
+            margin-top: 2rem;
+            transition: color 0.2s ease;
+        }
+
+        .back-link:hover {
+            color: #e1e1e1;
+        }
+    </style>
+
+    <div class="note-container">
+        <div class="note-header">
+            <h1 class="note-title">{{ note.title }}</h1>
+            <div class="note-meta">Created on {{ note.created_at|date:"M d, Y, H:i" }}</div>
+        </div>
+        {% if note.is_public %}
+            <p style="margin-top: 0.5rem; font-size: 0.9rem;">
+                🔗 Public Link:
+                <a href="/{{ note.user.username }}/{{ note.pk }}/" style="color: #a0a0a0;">
+                    /{{ note.user.username }}/{{ note.pk }}/
+                </a>
+            </p>
+        {% endif %}
+
+        <div class="note-content">
+            {{ html_content|safe }}
+        </div>
+
+        <a href="{% url 'index' %}" class="back-link">
+            <span>←</span>
+            Back to Notes
+        </a>
+    </div>
+{% endblock %}
